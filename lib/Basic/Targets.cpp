@@ -36,6 +36,7 @@
 #include "Targets/WebAssembly.h"
 #include "Targets/X86.h"
 #include "Targets/XCore.h"
+#include "Targets/Xtensa.h"
 #include "clang/Basic/Diagnostic.h"
 #include "llvm/ADT/Triple.h"
 
@@ -124,6 +125,9 @@ TargetInfo *AllocateTarget(const llvm::Triple &Triple,
 
   case llvm::Triple::xcore:
     return new XCoreTargetInfo(Triple, Opts);
+
+  case llvm::Triple::xtensa:
+    return new XtensaTargetInfo(Triple, Opts);  
 
   case llvm::Triple::hexagon:
     return new HexagonTargetInfo(Triple, Opts);
