@@ -43,8 +43,8 @@ public:
     WCharType = UnsignedChar;
     WIntType = UnsignedInt;
     UseZeroLengthBitfieldAlignment = true;
-    resetDataLayout("e-m:e-p:32:32-i1:8:32-i8:8:32-i16:16:32-i64:32"
-                       "-f64:32-a:0:32-n32");
+    resetDataLayout("e-m:e-p:32:32-i1:8:32-i8:8:32-i16:16:32-i64:64"
+                       "-f64:64-a:0:32-n32");
   }
 
 
@@ -58,16 +58,20 @@ public:
 //                           clang::Xtensa::LastTSBuiltin-Builtin::FirstTSBuiltin);
     return None;
   }
+
   BuiltinVaListKind getBuiltinVaListKind() const override {
-    return TargetInfo::VoidPtrBuiltinVaList;
+//    return TargetInfo::VoidPtrBuiltinVaList;
+    return TargetInfo::XtensaABIBuiltinVaList;
   }
+
   const char *getClobbers() const override {
     return "";
   }
+
   ArrayRef<const char *> getGCCRegNames() const override {
     static const char * const GCCRegNames[] = {
       "a0",   "sp",   "a1",   "a2",   "a3",   "a4",   "a5",   "a6", "a7",
-      "a8",   "a9",   "a10",  "a11",  "a12",  "a13",  "a14",  "a15", "sar",
+      "a8",   "a9",   "a10",  "a11",  "a12",  "a13",  "a14",  "a15" /* , "sar", */
     };
     return llvm::makeArrayRef(GCCRegNames);
   }
