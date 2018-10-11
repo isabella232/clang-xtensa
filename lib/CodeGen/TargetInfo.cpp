@@ -8346,7 +8346,7 @@ ABIArgInfo XtensaABIInfo::classifyArgumentType(QualType Ty, bool IsFixed,
   if (!IsFixed && NeededAlign == 2 * 32)
     NeededArgGPRs = 2 + (ArgGPRsLeft % 2);
   else if (Size > 32 && Size <= MAX_ARG_IN_REGS_SIZE)
-    NeededArgGPRs = Size / 32;
+    NeededArgGPRs = (Size + 31) / 32;
   if (NeededArgGPRs > ArgGPRsLeft) {
     MustUseStack = true;
     NeededArgGPRs = ArgGPRsLeft;
@@ -8380,7 +8380,7 @@ ABIArgInfo XtensaABIInfo::classifyArgumentType(QualType Ty, bool IsFixed,
           llvm::IntegerType::get(getVMContext(), 2 * 32));
     } else {
       return ABIArgInfo::getDirect(llvm::ArrayType::get(
-          llvm::IntegerType::get(getVMContext(), 32), Size / 32));
+          llvm::IntegerType::get(getVMContext(), 32), (Size + 31) / 32));
     }
   }
 #undef MAX_STRUCT_IN_REGS_SIZE
