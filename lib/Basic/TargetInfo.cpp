@@ -503,7 +503,6 @@ bool TargetInfo::validateOutputConstraint(ConstraintInfo &Info) const {
     case '%': // commutative.
       // FIXME: Check that there is a another register after this one.
       break;
-    case 'a':
     case 'r': // general register.
       Info.setAllowsRegister();
       break;
@@ -653,7 +652,6 @@ bool TargetInfo::validateInputConstraint(
       if (!validateAsmConstraint(Name, Info))
         return false;
       break;
-    case 'a':
     case 'r': // general register.
       Info.setAllowsRegister();
       break;

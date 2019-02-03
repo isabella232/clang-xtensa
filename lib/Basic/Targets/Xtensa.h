@@ -27,7 +27,6 @@ namespace clang {
 namespace targets {
 
 class LLVM_LIBRARY_VISIBILITY XtensaTargetInfo : public TargetInfo {
- // static const Builtin::Info BuiltinInfo[];
 
 public:
   XtensaTargetInfo(const llvm::Triple &Triple, const TargetOptions &)
@@ -48,20 +47,16 @@ public:
                        "-f64:64-a:0:32-n32");
   }
 
-
   void getTargetDefines(const LangOptions &Opts,
-                        MacroBuilder &Builder) const override;/* {
-    Builder.defineMacro("__Xtensa__");
-  }*/
+                        MacroBuilder &Builder) const override;
 
   ArrayRef<Builtin::Info> getTargetBuiltins() const override {
-//    return llvm::makeArrayRef(BuiltinInfo,
-//                           clang::Xtensa::LastTSBuiltin-Builtin::FirstTSBuiltin);
+
     return None;
   }
 
   BuiltinVaListKind getBuiltinVaListKind() const override {
-//    return TargetInfo::VoidPtrBuiltinVaList;
+
     return TargetInfo::XtensaABIBuiltinVaList;
   }
 
@@ -76,15 +71,24 @@ public:
     };
     return llvm::makeArrayRef(GCCRegNames);
   }
+
   ArrayRef<TargetInfo::GCCRegAlias> getGCCRegAliases() const override {
     return None;
   }
+
   bool validateAsmConstraint(const char *&Name,
                              TargetInfo::ConstraintInfo &Info) const override {
+    switch (*Name) {
+    default:
+      return false;
+    case 'a': 
+      Info.setAllowsRegister();
+      return true;
+    }
     return false;
   }
+
   int getEHDataRegisterNumber(unsigned RegNo) const override {
-    // R0=ExceptionPointerRegister R1=ExceptionSelectorRegister
     return (RegNo < 2)? RegNo : -1;
   }
 

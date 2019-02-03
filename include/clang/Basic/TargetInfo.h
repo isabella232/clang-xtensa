@@ -187,8 +187,8 @@ public:
     //   } va_list[1];
     SystemZBuiltinVaList,
 
-	// Tensilica Xtensa
-	XtensaABIBuiltinVaList
+    // Tensilica Xtensa
+    XtensaABIBuiltinVaList
   };
 
 protected:
