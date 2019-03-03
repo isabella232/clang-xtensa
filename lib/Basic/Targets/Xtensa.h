@@ -16,6 +16,7 @@
 
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Basic/TargetOptions.h"
+#include "llvm/ADT/StringSwitch.h"
 #include "llvm/ADT/Triple.h"
 #include "llvm/Support/Compiler.h"
 
@@ -27,6 +28,7 @@ namespace clang {
 namespace targets {
 
 class LLVM_LIBRARY_VISIBILITY XtensaTargetInfo : public TargetInfo {
+  std::string CPU;
 
 public:
   XtensaTargetInfo(const llvm::Triple &Triple, const TargetOptions &)
@@ -90,6 +92,19 @@ public:
 
   int getEHDataRegisterNumber(unsigned RegNo) const override {
     return (RegNo < 2)? RegNo : -1;
+  }
+
+  bool isValidCPUName(StringRef Name) const override {
+    return llvm::StringSwitch<bool>(Name)
+        .Case("esp32", true)
+        .Case("esp8266", true)
+        .Case("generic", true)
+        .Default(false);
+  }
+
+  bool setCPU(const std::string &Name) override {
+    CPU = Name;
+    return isValidCPUName(Name);
   }
 
 };
